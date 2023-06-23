@@ -15,6 +15,12 @@ object Api {
     const val PHOTO_IMAGE_TYPE = "photo"
 
     const val ContentType = "Content-Type: application/json"
+
+    /*
+    * Do not place secret keys like that in production.
+    * Use app preferences to store secret keys making custom
+    * session manager. */
+    const val API_KEY = "37699167-c79ddc6ba4895b131ee74e6f7"
 }
 
 object ApiEndPoint {

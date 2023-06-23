@@ -18,6 +18,12 @@ android {
         versionCode rootProject.versionCode
         versionName rootProject.versionName
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -69,6 +75,8 @@ dependencies {
     implementation "androidx.room:room-runtime:$room"
     implementation "androidx.room:room-ktx:$room"
     kapt "androidx.room:room-compiler:$room"
+    // For Paging 3 with Room DB
+    implementation "androidx.room:room-paging:$room"
     androidTestImplementation "androidx.room:room-testing:$room"
 
     //Navigation

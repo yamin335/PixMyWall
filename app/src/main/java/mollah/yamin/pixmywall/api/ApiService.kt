@@ -1,5 +1,6 @@
 package mollah.yamin.pixmywall.api
 
+import mollah.yamin.pixmywall.api.Api.API_KEY
 import mollah.yamin.pixmywall.api.Api.PHOTO_IMAGE_TYPE
 import mollah.yamin.pixmywall.models.PixDataResponse
 import retrofit2.Response
@@ -11,8 +12,8 @@ import retrofit2.http.Query
  */
 interface ApiService {
     @GET(ApiEndPoint.IMAGE_QUERY)
-    suspend fun getSiteBanner(
-        @Query("key") key: String,
+    suspend fun getPixDataBySearchQuery(
+        @Query("key") key: String = API_KEY,
         @Query("q") queryString: String,
         @Query("image_type") imageType: String = PHOTO_IMAGE_TYPE,
         @Query("page") pageIndex: Int,
