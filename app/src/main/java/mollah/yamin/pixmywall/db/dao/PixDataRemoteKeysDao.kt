@@ -10,7 +10,7 @@ import mollah.yamin.pixmywall.models.PixDataRemoteKey
 interface PixDataRemoteKeysDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(remoteKey: List<PixDataRemoteKey>)
+     fun insertAll(remoteKey: List<PixDataRemoteKey>)
 
     @Query("SELECT * FROM pix_data_remote_keys WHERE id = :pixDataId")
     suspend fun remoteKeysByPixDataId(pixDataId: Long): PixDataRemoteKey?
