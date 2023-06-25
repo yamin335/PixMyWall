@@ -1,5 +1,6 @@
 package mollah.yamin.pixmywall.ui.fragments
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.KeyEvent
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -42,6 +44,20 @@ class PixWallFragment : BaseFragment() {
     private val viewModel: GalleryViewModel by viewModels()
     private lateinit var consentDialog: CmnUserConsentDialog
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val callback = object : OnBackPressedCallback(
+            true // default to enabled
+        ) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this, // LifecycleOwner
+            callback
+        )
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

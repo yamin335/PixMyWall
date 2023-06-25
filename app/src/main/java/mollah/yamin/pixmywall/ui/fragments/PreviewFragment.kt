@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -33,9 +34,13 @@ class PreviewFragment : BaseFragment() {
     private lateinit var binding: FragmentPreviewBinding
     private val args: PreviewFragmentArgs by navArgs()
 
-    var currentAnimator: AnimatorSet? = null
+    private var currentAnimator: AnimatorSet? = null
+
+    private var isPreviewDialogOpen = false
 
     private lateinit var imageBitmap: Bitmap
+
+    private lateinit var triple: Triple<View, RectF, Float>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +48,25 @@ class PreviewFragment : BaseFragment() {
         // Inflate the layout for this fragment
         binding = FragmentPreviewBinding.inflate(layoutInflater, container, false)
         return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val callback = object : OnBackPressedCallback(
+            true // default to enabled
+        ) {
+            override fun handleOnBackPressed() {
+                if (isPreviewDialogOpen) {
+                    startDismissLargePreviewAnimation(triple.first, triple.second, triple.third)
+                } else {
+                    popBackStack()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this, // LifecycleOwner
+            callback
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -186,6 +210,7 @@ class PreviewFragment : BaseFragment() {
 
                 override fun onAnimationEnd(animation: Animator) {
                     currentAnimator = null
+                    isPreviewDialogOpen = true
                 }
 
                 override fun onAnimationCancel(animation: Animator) {
@@ -199,35 +224,41 @@ class PreviewFragment : BaseFragment() {
     private fun setDismissLargeImageAnimation(thumbView: View, startBounds: RectF, startScale: Float) {
         // When the zoomed-in image is tapped, it zooms down to the original
         // bounds and shows the thumbnail instead of the expanded image.
+        triple = Triple(thumbView, startBounds, startScale)
         binding.btnCloseDialog.setOnClickListener {
-            currentAnimator?.cancel()
+            startDismissLargePreviewAnimation(thumbView, startBounds, startScale)
+        }
+    }
 
-            // Animate the four positioning and sizing properties in parallel,
-            // back to their original values.
-            currentAnimator = AnimatorSet().apply {
-                play(ObjectAnimator.ofFloat(binding.expandedDialog, View.X, startBounds.left)).apply {
-                    with(ObjectAnimator.ofFloat(binding.expandedDialog, View.Y, startBounds.top))
-                    with(ObjectAnimator.ofFloat(binding.expandedDialog, View.SCALE_X, startScale))
-                    with(ObjectAnimator.ofFloat(binding.expandedDialog, View.SCALE_Y, startScale))
-                }
-                duration = 300.toLong()
-                interpolator = DecelerateInterpolator()
-                addListener(object : AnimatorListenerAdapter() {
+    private fun startDismissLargePreviewAnimation(thumbView: View, startBounds: RectF, startScale: Float) {
+        currentAnimator?.cancel()
 
-                    override fun onAnimationEnd(animation: Animator) {
-                        thumbView.alpha = 1f
-                        binding.expandedDialog.visibility = View.GONE
-                        currentAnimator = null
-                    }
-
-                    override fun onAnimationCancel(animation: Animator) {
-                        thumbView.alpha = 1f
-                        binding.expandedDialog.visibility = View.GONE
-                        currentAnimator = null
-                    }
-                })
-                start()
+        // Animate the four positioning and sizing properties in parallel,
+        // back to their original values.
+        currentAnimator = AnimatorSet().apply {
+            play(ObjectAnimator.ofFloat(binding.expandedDialog, View.X, startBounds.left)).apply {
+                with(ObjectAnimator.ofFloat(binding.expandedDialog, View.Y, startBounds.top))
+                with(ObjectAnimator.ofFloat(binding.expandedDialog, View.SCALE_X, startScale))
+                with(ObjectAnimator.ofFloat(binding.expandedDialog, View.SCALE_Y, startScale))
             }
+            duration = 300.toLong()
+            interpolator = DecelerateInterpolator()
+            addListener(object : AnimatorListenerAdapter() {
+
+                override fun onAnimationEnd(animation: Animator) {
+                    thumbView.alpha = 1f
+                    binding.expandedDialog.visibility = View.GONE
+                    currentAnimator = null
+                    isPreviewDialogOpen = false
+                }
+
+                override fun onAnimationCancel(animation: Animator) {
+                    thumbView.alpha = 1f
+                    binding.expandedDialog.visibility = View.GONE
+                    currentAnimator = null
+                }
+            })
+            start()
         }
     }
 }
