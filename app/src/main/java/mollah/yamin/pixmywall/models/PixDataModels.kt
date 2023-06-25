@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Keep
-data class PixDataResponse(val total: Int, val totalHits: Int, val hits: List<PixData>)
+data class PixDataResponse(val total: Int, val totalHits: Int, val hits: List<PixData>?)
 
 /*
 * It's best practice to define a string constant if it is used in multiple places
@@ -16,8 +16,9 @@ data class PixDataResponse(val total: Int, val totalHits: Int, val hits: List<Pi
 * */
 const val COLUMN_ID = "id"
 @Keep
-@Entity(tableName = "pix_data",
-    indices = [Index(value = ["query"], unique = false)])
+//@Entity(tableName = "pix_data",
+//    indices = [Index(value = ["query"], unique = false)])
+@Entity(tableName = "pix_data")
 data class PixData(
     @PrimaryKey
     @ColumnInfo(name = COLUMN_ID)
@@ -37,5 +38,7 @@ data class PixData(
     @ColumnInfo(name = "comments")
     val comments: Int,
     @ColumnInfo(name = "query")
-    val query: String?
+    val query: String?,
+    @ColumnInfo(name = "page_index")
+    val pageIndex: Int
 )

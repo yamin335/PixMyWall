@@ -12,9 +12,12 @@ interface PixDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(posts: List<PixData>)
 
-    @Query("SELECT * FROM pix_data WHERE `query` LIKE '%' || :query || '%'")
+    @Query("SELECT * FROM pix_data WHERE `query` LIKE '%' || :query || '%' ORDER BY page_index")
     fun pixDataBySearchQuery(query: String): PagingSource<Int, PixData>
 
-    @Query("DELETE FROM pix_data WHERE `query` LIKE '%' || :query || '%'")
-    suspend fun deleteBySearchQuery(query: String)
+    @Query("DELETE FROM pix_data")
+    suspend fun clearCachedPixData()
+
+//    @Query("DELETE FROM pix_data WHERE `query` LIKE '%' || :query || '%'")
+//    suspend fun deleteBySearchQuery(query: String)
 }

@@ -58,11 +58,11 @@ android {
 }
 
 dependencies {
+    implementation "androidx.core:core-ktx:$core_ktx"
+    implementation "androidx.appcompat:appcompat:$appcompat"
+    implementation "com.google.android.material:material:$material"
 
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefreshlayout"
 
     //Constraint Layout
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
@@ -104,25 +104,31 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor"
 
     // ViewModel
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
-    // Lifecycle
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
+    // Saved state module for ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
 
     // Fragment ktx
-    implementation 'androidx.fragment:fragment-ktx:1.6.0'
+    implementation "androidx.fragment:fragment-ktx:$fragment_ktx"
 
     // Activity ktx
-    implementation "androidx.activity:activity-ktx:1.7.2"
+    implementation "androidx.activity:activity-ktx:$activity_ktx"
 
     // Paging-3 for long-length list
     implementation "androidx.paging:paging-runtime-ktx:$paging_ktx"
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    // Coil
+    implementation "io.coil-kt:coil:2.4.0"
+
+    testImplementation "junit:junit:$junit"
+    androidTestImplementation "androidx.test.ext:junit:$junit_ext"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core"
 }

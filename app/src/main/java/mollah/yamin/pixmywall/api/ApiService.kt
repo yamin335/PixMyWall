@@ -18,5 +18,5 @@ interface ApiService {
         @Query("image_type") imageType: String = PHOTO_IMAGE_TYPE,
         @Query("page") pageIndex: Int,
         @Query("per_page") pageSize: Int
-    ): Response<PixDataResponse>
+    ): PixDataResponse
 }

@@ -14,4 +14,8 @@ interface PixDataRemoteKeysDao {
 
     @Query("SELECT * FROM pix_data_remote_keys WHERE id = :pixDataId")
     suspend fun remoteKeysByPixDataId(pixDataId: Long): PixDataRemoteKey?
+
+    @Query("DELETE FROM pix_data_remote_keys")
+    suspend fun clearRemoteKeys()
+
 }

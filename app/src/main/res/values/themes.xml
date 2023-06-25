@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.PixMyWall" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/color_theme</item>
         <item name="colorPrimaryVariant">@color/color_theme</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -21,5 +21,30 @@
 
     <style name="Theme.Main" parent="Theme.PixMyWall">
         <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    // Custom theme for white outlined TextInputEditText
+    <style name="Widget.AppTheme.TextInputLayout.OutlinedBox.White" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.TextInputLayout.OutlinedBox.White</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="boxCornerRadiusTopStart">@dimen/dp_16</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/dp_16</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/dp_16</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/dp_16</item>
+        <item name="colorPrimary">@color/edittext_box_stroke_color_white</item>
+        <item name="boxStrokeErrorColor">@color/color_theme_red</item>
+        <item name="boxStrokeWidth">@dimen/dp_point_75</item>
+        <item name="boxStrokeWidthFocused">@dimen/dp_1_point_5</item>
+        <item name="errorTextColor">@color/color_theme_red</item>
+        <item name="hintTextColor">@color/black</item>
+        <item name="android:textColorHint">@color/color_gray_light</item>
+        <item name="endIconTint">@color/edittext_icon_tint_color_white</item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.TextInputLayout.OutlinedBox.White" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="colorControlActivated">@color/black</item>
+        <item name="colorAccent">@color/color_theme_red</item>
     </style>
 </resources>
