@@ -15,11 +15,15 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_40"
+            android:clipToPadding="false">
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_12"
+                android:layout_marginBottom="@dimen/dp_40"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardCornerRadius="@dimen/dp_8"
                 app:cardElevation="@dimen/dp_4"
@@ -40,6 +44,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -68,15 +73,27 @@
                             android:text="@string/photo_credit"
                             android:textColor="@color/color_text" />
 
-                        <TextView
-                            android:id="@+id/user"
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{data.user}"
-                            android:textColor="@color/color_text"
-                            android:textSize="@dimen/sp_20"
-                            android:textStyle="bold"
-                            tools:text="User's full name" />
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="@dimen/dp_2">
+                            <ImageView
+                                android:id="@+id/userPhoto"
+                                android:layout_width="@dimen/dp_40"
+                                android:layout_height="@dimen/dp_40"
+                                tools:src="@drawable/img_placeholder" />
+                            <TextView
+                                android:id="@+id/user"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{data.user}"
+                                android:layout_marginStart="@dimen/dp_8"
+                                android:textColor="@color/color_text"
+                                android:textSize="@dimen/sp_20"
+                                android:textStyle="bold"
+                                tools:text="User's full name" />
+                        </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -132,7 +149,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/color_gray"
-                                android:text="@{data.likes}"
+                                android:text="@{String.valueOf(data.likes)}"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@id/linearLikes"
                                 app:layout_constraintStart_toStartOf="@id/linearLikes"
@@ -167,6 +184,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/color_gray"
+                                android:text="@{String.valueOf(data.comments)}"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@id/linearComments"
                                 app:layout_constraintStart_toStartOf="@id/linearComments"
@@ -199,6 +217,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/color_gray"
+                                android:text="@{String.valueOf(data.downloads)}"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@id/linearDownloads"
                                 app:layout_constraintStart_toStartOf="@id/linearDownloads"
@@ -235,6 +254,20 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/round_arrow_back_24" />
+
+                    <ImageView
+                        android:id="@+id/btnExpand"
+                        android:layout_width="@dimen/dp_38"
+                        android:layout_height="@dimen/dp_38"
+                        android:layout_margin="@dimen/dp_8"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/rounded_info_bg"
+                        android:padding="@dimen/dp_6"
+                        app:layout_constraintBottom_toBottomOf="@+id/photo"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0"
+                        app:srcCompat="@drawable/ic_expand" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
         </androidx.core.widget.NestedScrollView>

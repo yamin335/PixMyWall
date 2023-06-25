@@ -38,8 +38,10 @@ data class PixData(
     val likes: Int,
     @ColumnInfo(name = "comments")
     val comments: Int,
+    @ColumnInfo(name = "user_image_url")
+    val userImageURL: String?,
     @ColumnInfo(name = "query")
-    val query: String?,
+    var query: String?,
     @ColumnInfo(name = "page_index")
     val pageIndex: Int
 ): Serializable

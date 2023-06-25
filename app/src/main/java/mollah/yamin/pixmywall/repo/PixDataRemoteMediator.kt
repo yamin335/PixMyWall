@@ -83,7 +83,7 @@ class PixDataRemoteMediator(
                     val temp = PixData(
                         pixData.id, pixData.tags, pixData.previewURL,
                         pixData.largeImageURL, pixData.user, pixData.downloads,
-                        pixData.likes, pixData.comments, query, pageIndex
+                        pixData.likes, pixData.comments, pixData.userImageURL, query, pageIndex
                     )
                     newList.add(temp)
                     keys.add(PixDataRemoteKey(pixDataId = pixData.id, prevKey = prevKey, nextKey = nextKey))
