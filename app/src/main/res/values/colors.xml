@@ -18,4 +18,6 @@
     <color name="color_gray_light">#CCCCCC</color>
     <color name="color_gray">#808080</color>
     <color name="color_info_bg">#73000000</color>
+
+    <color name="color_dialog_bg">#D9000000</color>
 </resources>

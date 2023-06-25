@@ -11,7 +11,8 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:id="@+id/container">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -268,8 +269,48 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="1.0"
                         app:srcCompat="@drawable/ic_expand" />
+
+                    <TextView
+                        android:id="@+id/startView"
+                        android:layout_width="@dimen/dp_0"
+                        android:layout_height="@dimen/dp_0"
+                        app:layout_constraintBottom_toBottomOf="@+id/photo"
+                        app:layout_constraintEnd_toEndOf="@+id/photo"
+                        app:layout_constraintStart_toStartOf="@+id/photo"
+                        app:layout_constraintTop_toTopOf="@+id/photo" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
         </androidx.core.widget.NestedScrollView>
+
+        <RelativeLayout
+            android:id="@+id/expandedDialog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_dialog_bg"
+            android:elevation="@dimen/dp_6"
+            android:visibility="gone"
+            android:fitsSystemWindows="true">
+
+            <mollah.yamin.pixmywall.ui.views.ZoomableImageView
+                android:id="@+id/expandedPreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/app_name"
+                android:elevation="@dimen/dp_7"/>
+
+            <ImageView
+                android:id="@+id/btnCloseDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_5"
+                app:srcCompat="@drawable/round_clear_24"
+                app:tint="@color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:elevation="@dimen/dp_8"
+                android:layout_margin="@dimen/dp_16"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"/>
+        </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
