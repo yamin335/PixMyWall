@@ -24,18 +24,17 @@ class HomeActivity : AppCompatActivity(), NavigationHost {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (BuildCompat.isAtLeastT()) {
-            onBackInvokedDispatcher.registerOnBackInvokedCallback(
-                OnBackInvokedDispatcher.PRIORITY_DEFAULT
-            ) {
-                onBackPressedDispatcher.onBackPressed()
-            }
-        } else {
-            onBackPressedDispatcher.addCallback(this /* lifecycle owner */) {
-                // Back is pressed... Finishing the activity
-                onBackPressedDispatcher.onBackPressed()
-            }
-        }
+//        if (BuildCompat.isAtLeastT()) {
+//            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+//                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+//            ) {
+//
+//            }
+//        } else {
+//            onBackPressedDispatcher.addCallback(this /* lifecycle owner */) {
+//                // Back is pressed... Finishing the activity
+//            }
+//        }
     }
 
     override fun registerToolbarWithNavigation(toolbar: Toolbar) {

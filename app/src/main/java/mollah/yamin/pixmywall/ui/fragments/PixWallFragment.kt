@@ -50,7 +50,7 @@ class PixWallFragment : BaseFragment() {
             true // default to enabled
         ) {
             override fun handleOnBackPressed() {
-                requireActivity().finish()
+                showClosingDialog()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -80,7 +80,7 @@ class PixWallFragment : BaseFragment() {
     }
 
     /**
-     * Binds the [UiState] provided  by the [SearchRepositoriesViewModel] to the UI,
+     * Binds the [UiState] provided  by the [GalleryViewModel] to the UI,
      * and allows the UI to feed back user actions to it.
      */
     private fun FragmentPixWallBinding.bindState(
@@ -134,6 +134,20 @@ class PixWallFragment : BaseFragment() {
             }
         }, title = "Full Image Preview", subTitle = "Want to see more details with large photo preview?")
         consentDialog.show(parentFragmentManager, "#user_consent_dialog")
+    }
+
+    private fun showClosingDialog() {
+        consentDialog = CmnUserConsentDialog(object : CmnUserConsentDialog.UserConsentActionListener {
+            override fun onCancelPressed() {
+                consentDialog.dismiss()
+            }
+
+            override fun onOkPressed() {
+                consentDialog.dismiss()
+                requireActivity().finish()
+            }
+        }, title = "Are you sure?", subTitle = "Are you sure to leave now?")
+        consentDialog.show(parentFragmentManager, "#user_consent_closing_dialog")
     }
 
     private fun FragmentPixWallBinding.bindSearch(
