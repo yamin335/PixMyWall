@@ -3,6 +3,7 @@
     // dp values
 
     // 1-10
+    <dimen name="dp_0">1dp</dimen>
     <dimen name="dp_point_75">0.75dp</dimen>
     <dimen name="dp_1">1dp</dimen>
     <dimen name="dp_1_point_5">1.5dp</dimen>
@@ -167,10 +168,5 @@
     <dimen name="sp_38">38sp</dimen>
     <dimen name="sp_39">39sp</dimen>
     <dimen name="sp_40">40sp</dimen>
-    <dimen name="dp_106">106dp</dimen>
-    <dimen name="dp_110">110dp</dimen>
-    <dimen name="dp_116">116dp</dimen>
-    <dimen name="dp_120">120dp</dimen>
-    <dimen name="dp_126">126dp</dimen>
 
 </resources>

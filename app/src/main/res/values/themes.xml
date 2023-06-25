@@ -25,8 +25,6 @@
 
     // Custom theme for white outlined TextInputEditText
     <style name="Widget.AppTheme.TextInputLayout.OutlinedBox.White" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="materialThemeOverlay">@style/ThemeOverlay.AppTheme.TextInputLayout.OutlinedBox.White</item>
         <item name="android:textColor">@color/black</item>
         <item name="boxCornerRadiusTopStart">@dimen/dp_16</item>
@@ -46,5 +44,13 @@
     <style name="ThemeOverlay.AppTheme.TextInputLayout.OutlinedBox.White" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
         <item name="colorControlActivated">@color/black</item>
         <item name="colorAccent">@color/color_theme_red</item>
+    </style>
+
+    <style name="CustomBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
+    </style>
+
+    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
     </style>
 </resources>

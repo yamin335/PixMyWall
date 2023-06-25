@@ -1,4 +1,4 @@
-package mollah.yamin.pixmywall.ui
+package mollah.yamin.pixmywall.ui.vm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

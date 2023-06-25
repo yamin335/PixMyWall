@@ -6,4 +6,11 @@
     <string name="retry">Retry</string>
     <string name="no_results">No photos found</string>
     <string name="tags">Tags</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="likes">Likes</string>
+    <string name="comments">Comments</string>
+    <string name="downloads">Downloads</string>
 </resources>

@@ -1,13 +1,15 @@
-package mollah.yamin.pixmywall.ui
+package mollah.yamin.pixmywall.ui.fragments
 
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -21,32 +23,37 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import mollah.yamin.pixmywall.R
-import mollah.yamin.pixmywall.databinding.ActivityGalleryBinding
+import mollah.yamin.pixmywall.databinding.FragmentPixWallBinding
 import mollah.yamin.pixmywall.models.PixData
 import mollah.yamin.pixmywall.models.UiAction
 import mollah.yamin.pixmywall.models.UiState
 import mollah.yamin.pixmywall.paging3.RemotePresentationState
 import mollah.yamin.pixmywall.paging3.asRemotePresentationState
+import mollah.yamin.pixmywall.ui.vm.GalleryViewModel
 import mollah.yamin.pixmywall.ui.adapters.PixDataPagingAdapter
 import mollah.yamin.pixmywall.ui.adapters.PixDataPagingLoadStateAdapter
-import mollah.yamin.pixmywall.ui.vm.GalleryViewModel
+import mollah.yamin.pixmywall.ui.base.BaseFragment
+import mollah.yamin.pixmywall.ui.dialog.CmnUserConsentDialog
 import mollah.yamin.pixmywall.utils.hideKeyboard
-import mollah.yamin.pixmywall.utils.updateStatusBarBackgroundColor
-
 
 @AndroidEntryPoint
-class GalleryActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityGalleryBinding
+class PixWallFragment : BaseFragment() {
+    private lateinit var binding: FragmentPixWallBinding
     private val viewModel: GalleryViewModel by viewModels()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        updateStatusBarBackgroundColor(R.color.white)
+    private lateinit var consentDialog: CmnUserConsentDialog
 
-        binding = ActivityGalleryBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        binding = FragmentPixWallBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
 
-        setSupportActionBar(binding.toolbar)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        
+        registerToolbar(binding.toolbar)
 
         // bind the state
         binding.bindState(
@@ -60,7 +67,7 @@ class GalleryActivity : AppCompatActivity() {
      * Binds the [UiState] provided  by the [SearchRepositoriesViewModel] to the UI,
      * and allows the UI to feed back user actions to it.
      */
-    private fun ActivityGalleryBinding.bindState(
+    private fun FragmentPixWallBinding.bindState(
         uiState: StateFlow<UiState>,
         pagingData: Flow<PagingData<PixData>>,
         uiActions: (UiAction) -> Unit
@@ -68,12 +75,14 @@ class GalleryActivity : AppCompatActivity() {
         val orientation = resources.configuration.orientation
 
         val staggeredGridLayoutManager = if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         } else {
             StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         }
-        val repoAdapter = PixDataPagingAdapter {
-            val ss = ""
+        val repoAdapter = PixDataPagingAdapter { pixData ->
+            pixData?.let {
+                showDetails(it)
+            }
         }
         val header = PixDataPagingLoadStateAdapter { repoAdapter.retry() }
         pixWallRecycler.layoutManager = staggeredGridLayoutManager
@@ -97,7 +106,21 @@ class GalleryActivity : AppCompatActivity() {
         }
     }
 
-    private fun ActivityGalleryBinding.bindSearch(
+    private fun showDetails(pixData: PixData) {
+        consentDialog = CmnUserConsentDialog(object : CmnUserConsentDialog.UserConsentActionListener {
+            override fun onCancelPressed() {
+                consentDialog.dismiss()
+            }
+
+            override fun onOkPressed() {
+                navigateTo(PixWallFragmentDirections.actionPixWallFragmentToPreviewFragment(pixData))
+                consentDialog.dismiss()
+            }
+        }, title = "Full Image Preview", subTitle = "Want to see more details with large photo preview?")
+        consentDialog.show(parentFragmentManager, "#user_consent_dialog")
+    }
+
+    private fun FragmentPixWallBinding.bindSearch(
         uiState: StateFlow<UiState>,
         onQueryChanged: (UiAction.Search) -> Unit
     ) {
@@ -120,7 +143,8 @@ class GalleryActivity : AppCompatActivity() {
             }
         }
 
-        lifecycleScope.launch {
+        // For activity use only `lifecycleScope`
+        viewLifecycleOwner.lifecycleScope.launch {
             uiState
                 .map { it.query }
                 .distinctUntilChanged()
@@ -128,7 +152,7 @@ class GalleryActivity : AppCompatActivity() {
         }
     }
 
-    private fun ActivityGalleryBinding.updateRepoListFromInput(onQueryChanged: (UiAction.Search) -> Unit) {
+    private fun FragmentPixWallBinding.updateRepoListFromInput(onQueryChanged: (UiAction.Search) -> Unit) {
         searchInput.text?.trim().let {
             if (!it.isNullOrBlank()) {
                 pixWallRecycler.scrollToPosition(0)
@@ -137,7 +161,7 @@ class GalleryActivity : AppCompatActivity() {
         }
     }
 
-    private fun ActivityGalleryBinding.bindList(
+    private fun FragmentPixWallBinding.bindList(
         header: PixDataPagingLoadStateAdapter,
         repoAdapter: PixDataPagingAdapter,
         uiState: StateFlow<UiState>,
@@ -169,17 +193,17 @@ class GalleryActivity : AppCompatActivity() {
             Boolean::and
         ).distinctUntilChanged()
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             pagingData.collectLatest(repoAdapter::submitData)
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             shouldScrollToTop.collect { shouldScroll ->
                 if (shouldScroll) pixWallRecycler.scrollToPosition(0)
             }
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repoAdapter.loadStateFlow.collect { loadState ->
                 // Show a retry header if there was an error refreshing, and items were previously
                 // cached OR default to the default prepend state
@@ -204,7 +228,7 @@ class GalleryActivity : AppCompatActivity() {
                     ?: loadState.prepend as? LoadState.Error
                 errorState?.let {
                     Toast.makeText(
-                        this@GalleryActivity,
+                        mContext,
                         "\uD83D\uDE28 Wooops ${it.error}",
                         Toast.LENGTH_LONG
                     ).show()

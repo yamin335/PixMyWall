@@ -17,7 +17,7 @@
             android:layout_margin="@dimen/dp_6"
             app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="@dimen/dp_8"
-            app:cardElevation="@dimen/dp_5"
+            app:cardElevation="@dimen/dp_4"
             app:cardUseCompatPadding="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,46 +47,49 @@
                     android:id="@+id/info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/dp_8"
-                    android:layout_marginVertical="@dimen/dp_8"
+                    android:paddingHorizontal="@dimen/dp_8"
+                    android:paddingBottom="@dimen/dp_8"
+                    android:paddingTop="@dimen/dp_4"
                     android:orientation="vertical"
+                    android:background="@drawable/rounded_info_bg"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/photo">
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/photo_credit"
-                        android:textSize="@dimen/sp_10" />
+                        android:textSize="@dimen/sp_10"
+                        android:textColor="@color/white"/>
 
                     <TextView
                         android:id="@+id/user"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@{data.user}"
-                        android:textColor="@color/color_text"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/sp_16"
                         android:textStyle="bold"
                         tools:text="User's full name" />
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/dp_8"
-                        android:text="@string/tags"
-                        android:textColor="@color/color_text"
-                        tools:text="Tags" />
+                        android:layout_height="@dimen/dp_point_75"
+                        android:background="@color/color_gray_light"
+                        android:layout_marginBottom="@dimen/dp_8"
+                        android:layout_marginTop="@dimen/dp_2"/>
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/tag_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:chipSpacingHorizontal="6dp"
-                        app:chipSpacingVertical="6dp"
+                        android:padding="0dp"
+                        app:chipSpacing="0dp"
+                        app:chipSpacingHorizontal="@dimen/dp_5"
+                        app:chipSpacingVertical="@dimen/dp_5"
                         app:selectionRequired="false"
-                        app:singleSelection="false"></com.google.android.material.chip.ChipGroup>
+                        app:singleSelection="false"/>
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

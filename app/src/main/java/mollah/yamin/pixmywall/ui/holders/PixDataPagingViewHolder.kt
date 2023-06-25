@@ -1,12 +1,17 @@
 package mollah.yamin.pixmywall.ui.holders
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.request.CachePolicy
 import coil.transform.RoundedCornersTransformation
+import com.google.android.material.R.style
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
 import mollah.yamin.pixmywall.R
 import mollah.yamin.pixmywall.databinding.PixWallListItemBinding
 import mollah.yamin.pixmywall.models.PixData
@@ -28,6 +33,7 @@ class PixDataPagingViewHolder(
     }
 
     fun bind(data: PixData?) {
+        binding.tagGroup.removeAllViews()
         if (data == null) {
             binding.info.visibility = View.GONE
         } else {
@@ -45,7 +51,19 @@ class PixDataPagingViewHolder(
                     8.dpToPx(binding.root.context))
                 )
             }
+            var id = 0
+            data.tags?.split(",")?.asSequence()?.forEach { tag ->
+                binding.tagGroup.addView(createTagChip(binding.root.context, id++, tag.trim()))
+            }
+            binding.tagGroup.requestLayout()
         }
+    }
+
+    private fun createTagChip(context: Context, chipId: Int, value: String): Chip {
+        val chip = LayoutInflater.from(context).inflate(R.layout.list_item_tag,null) as Chip
+        chip.id = chipId
+        chip.text = value
+        return chip
     }
 
     companion object {

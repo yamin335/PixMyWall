@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 @Keep
 data class PixDataResponse(val total: Int, val totalHits: Int, val hits: List<PixData>?)
@@ -41,4 +42,4 @@ data class PixData(
     val query: String?,
     @ColumnInfo(name = "page_index")
     val pageIndex: Int
-)
+): Serializable

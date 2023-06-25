@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_nav_graph.xml"
+    app:startDestination="@id/pixWallFragment">
+
+    <fragment
+        android:id="@+id/pixWallFragment"
+        android:name="mollah.yamin.pixmywall.ui.fragments.PixWallFragment"
+        android:label="fragment_pix_wall"
+        tools:layout="@layout/fragment_pix_wall" >
+        <action
+            android:id="@+id/action_pixWallFragment_to_previewFragment"
+            app:destination="@id/previewFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/previewFragment"
+        android:name="mollah.yamin.pixmywall.ui.fragments.PreviewFragment"
+        android:label="fragment_preview"
+        tools:layout="@layout/fragment_preview" >
+        <argument
+            android:name="pixData"
+            app:argType="mollah.yamin.pixmywall.models.PixData" />
+    </fragment>
+</navigation>

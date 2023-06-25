@@ -19,6 +19,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
+            android:name=".ui.HomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Main"/>
+        <activity
             android:name=".ui.LauncherActivity"
             android:exported="true"
             android:theme="@style/Theme.Launcher">
@@ -30,8 +34,7 @@
         </activity>
         <activity
             android:name=".ui.GalleryActivity"
-            android:theme="@style/Theme.Main">
-        </activity>
+            android:theme="@style/Theme.Main"/>
     </application>
 
 </manifest>

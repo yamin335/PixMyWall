@@ -12,7 +12,7 @@ class LauncherActivity : AppCompatActivity() {
 
         /*
         * If there is any task to */
-        val intent = Intent(this@LauncherActivity, GalleryActivity::class.java)
+        val intent = Intent(this@LauncherActivity, HomeActivity::class.java)
         startActivity(intent)
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finish()
