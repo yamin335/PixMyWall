@@ -19,7 +19,7 @@ class PixDataPagingLoadStateViewHolder(
 
     fun bind(loadState: LoadState) {
         if (loadState is LoadState.Error) {
-            binding.errorMsg.text = loadState.error.localizedMessage
+            binding.errorMsg.text = binding.root.context.getString(R.string.unable_to_load)//loadState.error.localizedMessage
         }
         binding.progressBar.isVisible = loadState is LoadState.Loading
         binding.retryButton.isVisible = loadState is LoadState.Error

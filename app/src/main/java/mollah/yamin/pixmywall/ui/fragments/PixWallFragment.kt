@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import mollah.yamin.pixmywall.R
 import mollah.yamin.pixmywall.coil.PixDataLargePhotoMapper
 import mollah.yamin.pixmywall.databinding.FragmentPixWallBinding
 import mollah.yamin.pixmywall.di.LargeImageLoader
@@ -227,6 +228,10 @@ class PixWallFragment: BaseFragment() {
         swipeRefresh.setOnRefreshListener {
             repoAdapter.refresh()
         }
+
+        isConnected.observe(viewLifecycleOwner) {
+            if (it) repoAdapter.retry()
+        }
     }
 
     private fun showDetails(pixData: PixData) {
@@ -333,24 +338,16 @@ class PixWallFragment: BaseFragment() {
                 val isListEmpty = loadState.refresh is LoadState.NotLoading && repoAdapter.itemCount == 0
                 // show empty list
                 emptyList.isVisible = isListEmpty
+                emptyList.text = getString(R.string.no_results)
                 // Only show the list if refresh succeeds, either from the the local db or the remote.
                 pixWallRecycler.isVisible =  loadState.source.refresh is LoadState.NotLoading || loadState.mediator?.refresh is LoadState.NotLoading
                 // Show loading spinner during initial load or refresh.
                 swipeRefresh.isRefreshing = loadState.mediator?.refresh is LoadState.Loading
                 // Show the retry state if initial load or refresh fails.
-                retryButton.isVisible = loadState.mediator?.refresh is LoadState.Error && repoAdapter.itemCount == 0
-                // Toast on any error, regardless of whether it came from RemoteMediator or PagingSource
-                val errorState = loadState.source.append as? LoadState.Error
-                    ?: loadState.source.prepend as? LoadState.Error
-                    ?: loadState.append as? LoadState.Error
-                    ?: loadState.prepend as? LoadState.Error
-                errorState?.let {
-                    Toast.makeText(
-                        mContext,
-                        "\uD83D\uDE28 Wooops ${it.error}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                val triedButFailed = loadState.mediator?.refresh is LoadState.Error && repoAdapter.itemCount == 0
+                retryButton.isVisible = triedButFailed
+                emptyList.isVisible = triedButFailed
+                emptyList.text = getString(R.string.could_not_load_data)
             }
         }
     }

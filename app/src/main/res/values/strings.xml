@@ -12,4 +12,6 @@
     <string name="likes">Likes</string>
     <string name="comments">Comments</string>
     <string name="downloads">Downloads</string>
+    <string name="could_not_load_data">Could not load data</string>
+    <string name="unable_to_load">Couldn\'t load photos</string>
 </resources>
