@@ -45,7 +45,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
-                        android:scaleType="fitCenter"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +82,7 @@
                                 android:id="@+id/userPhoto"
                                 android:layout_width="@dimen/dp_40"
                                 android:layout_height="@dimen/dp_40"
-                                tools:src="@drawable/img_placeholder" />
+                                app:srcCompat="@drawable/ic_profile_avatar" />
                             <TextView
                                 android:id="@+id/user"
                                 android:layout_width="match_parent"
@@ -99,7 +98,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="@dimen/dp_8"
+                            android:layout_marginTop="@dimen/dp_16"
+                            android:layout_marginBottom="@dimen/dp_8"
                             android:textColor="@color/color_gray"
                             android:text="@string/tags"/>
 
@@ -143,6 +143,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/dp_8"
                                     android:text="@string/likes"
+                                    android:textSize="@dimen/sp_13"
                                     android:textColor="@color/color_gray" />
                             </LinearLayout>
 
@@ -178,6 +179,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/dp_5"
                                     android:text="@string/comments"
+                                    android:textSize="@dimen/sp_13"
                                     android:textColor="@color/color_gray" />
                             </LinearLayout>
 
@@ -211,6 +213,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/downloads"
+                                    android:textSize="@dimen/sp_13"
                                     android:textColor="@color/color_gray" />
                             </LinearLayout>
 
@@ -261,6 +264,7 @@
                         android:layout_width="@dimen/dp_38"
                         android:layout_height="@dimen/dp_38"
                         android:layout_margin="@dimen/dp_8"
+                        android:visibility="gone"
                         android:adjustViewBounds="true"
                         android:background="@drawable/rounded_info_bg"
                         android:padding="@dimen/dp_6"
@@ -278,6 +282,19 @@
                         app:layout_constraintEnd_toEndOf="@+id/photo"
                         app:layout_constraintStart_toStartOf="@+id/photo"
                         app:layout_constraintTop_toTopOf="@+id/photo" />
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        android:visibility="gone"
+                        android:indeterminateTint="@color/color_theme"
+                        app:layout_constraintBottom_toBottomOf="@+id/photo"
+                        app:layout_constraintEnd_toEndOf="@+id/photo"
+                        app:layout_constraintStart_toStartOf="@+id/photo"
+                        app:layout_constraintTop_toTopOf="@+id/photo"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
         </androidx.core.widget.NestedScrollView>
@@ -286,7 +303,7 @@
             android:id="@+id/expandedDialog"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/color_dialog_bg"
+            android:background="@color/black"
             android:elevation="@dimen/dp_6"
             android:visibility="gone"
             android:fitsSystemWindows="true">

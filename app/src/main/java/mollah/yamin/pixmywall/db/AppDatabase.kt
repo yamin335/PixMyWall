@@ -5,9 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import mollah.yamin.pixmywall.BuildConfig
+import mollah.yamin.pixmywall.db.dao.PixDataCacheDao
 import mollah.yamin.pixmywall.db.dao.PixDataDao
 import mollah.yamin.pixmywall.db.dao.PixDataRemoteKeysDao
 import mollah.yamin.pixmywall.models.PixData
+import mollah.yamin.pixmywall.models.PixDataCache
 import mollah.yamin.pixmywall.models.PixDataRemoteKey
 
 private const val DATABASE = "PixWall.db"
@@ -19,7 +21,8 @@ private const val DATABASE_VERSION = 1
 @Database(
     entities = [
         PixData::class,
-        PixDataRemoteKey::class
+        PixDataRemoteKey::class,
+        PixDataCache::class
     ],
     version = DATABASE_VERSION,
     exportSchema = true
@@ -29,6 +32,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun pixDataDao(): PixDataDao
     abstract fun pixDataRemoteKeysDao(): PixDataRemoteKeysDao
+    abstract fun pixDataCacheDao(): PixDataCacheDao
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null

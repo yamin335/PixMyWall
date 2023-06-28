@@ -1,13 +1,17 @@
 package mollah.yamin.pixmywall.ui.holders
 
 import android.content.Context
+import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
 import coil.load
+
 import coil.request.CachePolicy
+import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import com.google.android.material.R.style
 import com.google.android.material.chip.Chip
@@ -40,17 +44,41 @@ class PixDataPagingViewHolder(
             this.pixData = data
             binding.info.visibility = View.VISIBLE
             binding.data = data
-            binding.photo.load(data.previewURL) {
-                crossfade(true)
-                diskCachePolicy(CachePolicy.ENABLED)
-                memoryCachePolicy(CachePolicy.ENABLED)
-                transformations(RoundedCornersTransformation(
-                    8.dpToPx(binding.root.context),
-                    8.dpToPx(binding.root.context),
-                    8.dpToPx(binding.root.context),
-                    8.dpToPx(binding.root.context))
+
+            val mContext = binding.root.context
+            val imageLoader = ImageLoader.Builder(mContext).build()
+
+            val request = ImageRequest.Builder(mContext)
+                .data(data.previewURL)
+                .diskCachePolicy(CachePolicy.ENABLED)
+                .memoryCachePolicy(CachePolicy.ENABLED)
+                .crossfade(true)
+//            .transformations(
+//                RoundedCornersTransformation(
+//                    8.dpToPx(binding.root.context),
+//                    8.dpToPx(binding.root.context),
+//                    8.dpToPx(binding.root.context),
+//                    8.dpToPx(binding.root.context))
+//            )
+                .target(
+                    onStart = { placeholder ->
+                        // Handle the placeholder drawable.
+                    },
+                    onSuccess = { result ->
+                        // Handle the successful result.
+                        binding.photo.setImageDrawable(result)
+                    },
+                    onError = { error ->
+                        // Handle the error drawable.
+                    }
                 )
-            }
+                .build()
+            imageLoader.enqueue(request)
+
+//            binding.photo.load(data.previewURL) {
+//                crossfade(true)
+//                placeholder(R.drawable.img_placeholder)
+//            }
             var id = 0
             data.tags?.split(",")?.asSequence()?.forEach { tag ->
                 binding.tagGroup.addView(createTagChip(binding.root.context, id++, tag.trim()))

@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import mollah.yamin.pixmywall.db.AppDatabase
+import mollah.yamin.pixmywall.db.dao.PixDataCacheDao
 import mollah.yamin.pixmywall.db.dao.PixDataDao
 import mollah.yamin.pixmywall.db.dao.PixDataRemoteKeysDao
 import javax.inject.Singleton
@@ -37,5 +38,11 @@ object DBModule {
     @Provides
     fun providePixDataRemoteKeysDao(db: AppDatabase): PixDataRemoteKeysDao {
         return db.pixDataRemoteKeysDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providePixDataCacheDao(db: AppDatabase): PixDataCacheDao {
+        return db.pixDataCacheDao()
     }
 }

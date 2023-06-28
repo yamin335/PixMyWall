@@ -12,9 +12,10 @@ import mollah.yamin.pixmywall.ui.base.NavigationHost
 import mollah.yamin.pixmywall.utils.updateStatusBarBackgroundColor
 import androidx.activity.addCallback
 import androidx.core.os.BuildCompat
+import mollah.yamin.pixmywall.ui.base.BaseActivity
 
 @AndroidEntryPoint
-class HomeActivity : AppCompatActivity(), NavigationHost {
+class HomeActivity : BaseActivity() {
     private lateinit var binding: ActivityHomeBinding
 
     @androidx.annotation.OptIn(BuildCompat.PrereleaseSdkCheck::class)
@@ -28,16 +29,12 @@ class HomeActivity : AppCompatActivity(), NavigationHost {
 //            onBackInvokedDispatcher.registerOnBackInvokedCallback(
 //                OnBackInvokedDispatcher.PRIORITY_DEFAULT
 //            ) {
-//
+//               // Back button is pressed
 //            }
 //        } else {
-//            onBackPressedDispatcher.addCallback(this /* lifecycle owner */) {
-//                // Back is pressed... Finishing the activity
+//            onBackPressedDispatcher.addCallback(this) {
+//                // Back button is pressed
 //            }
 //        }
-    }
-
-    override fun registerToolbarWithNavigation(toolbar: Toolbar) {
-        setSupportActionBar(toolbar)
     }
 }

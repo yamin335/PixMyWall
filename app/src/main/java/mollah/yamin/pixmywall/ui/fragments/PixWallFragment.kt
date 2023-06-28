@@ -3,6 +3,7 @@ package mollah.yamin.pixmywall.ui.fragments
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -15,17 +16,26 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.map
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import coil.ImageLoader
+import coil.disk.DiskCache
+import coil.memory.MemoryCache
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import mollah.yamin.pixmywall.coil.PixDataLargePhotoMapper
 import mollah.yamin.pixmywall.databinding.FragmentPixWallBinding
+import mollah.yamin.pixmywall.di.LargeImageLoader
 import mollah.yamin.pixmywall.models.PixData
 import mollah.yamin.pixmywall.models.UiAction
 import mollah.yamin.pixmywall.models.UiState
@@ -37,12 +47,19 @@ import mollah.yamin.pixmywall.ui.adapters.PixDataPagingLoadStateAdapter
 import mollah.yamin.pixmywall.ui.base.BaseFragment
 import mollah.yamin.pixmywall.ui.dialog.CmnUserConsentDialog
 import mollah.yamin.pixmywall.utils.hideKeyboard
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class PixWallFragment : BaseFragment() {
+class PixWallFragment: BaseFragment() {
+
+    @Inject
+    @LargeImageLoader
+    lateinit var largeImageLoader: ImageLoader
     private lateinit var binding: FragmentPixWallBinding
     private val viewModel: GalleryViewModel by viewModels()
-    private lateinit var consentDialog: CmnUserConsentDialog
+    private var appExitDialog: CmnUserConsentDialog? = null
+    private var detailPreviewDialog: CmnUserConsentDialog? = null
+    private var pixDataForPreview: PixData? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -67,9 +84,73 @@ class PixWallFragment : BaseFragment() {
         return binding.root
     }
 
+    override fun onPause() {
+        if (appExitDialog != null &&
+            appExitDialog?.isAdded == true &&
+            appExitDialog?.isVisible == true) {
+            appExitDialog?.dismiss()
+        }
+
+        if (detailPreviewDialog != null &&
+            detailPreviewDialog?.isAdded == true &&
+            detailPreviewDialog?.isVisible == true) {
+            detailPreviewDialog?.dismiss()
+        }
+        super.onPause()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         
         registerToolbar(binding.toolbar)
+
+        initDialogs()
+
+//        val imageLoader = ImageLoader.Builder(mContext)
+//            .memoryCache {
+//                MemoryCache.Builder(mContext)
+//                    .maxSizePercent(0.5)
+//                    .build()
+//            }
+//            .diskCache {
+//                DiskCache.Builder()
+//                    .directory(requireActivity().cacheDir.resolve("image_cache"))
+//                    .maxSizePercent(0.2)
+//                    .build()
+//            }
+//            .build()
+
+//        viewModel.newPixDataCache.observe(viewLifecycleOwner) { list ->
+//
+//            for(data in list) {
+//                Log.d("DEBUG_LOG:", "Item fetched: ${data.userImageURL}")
+//
+//                val url = data.largeImageURL!!
+////                val imageLoader = ImageLoader.Builder(mContext)
+////                    .components {
+////                        add(PixDataLargePhotoMapper())
+////                    }
+////                    .memoryCache {
+////                        MemoryCache.Builder(mContext)
+////                            .maxSizePercent(0.25)
+////                            .build()
+////                    }
+////                    .diskCache {
+////                        DiskCache.Builder()
+////                            .directory(mContext.cacheDir.resolve("image_cache"))
+////                            .maxSizePercent(0.02)
+////                            .build()
+////                    }
+////                    .build()
+//
+//
+//                val request = ImageRequest.Builder(mContext)
+//                    .data(url)
+//                    // Disable reading from/writing to the memory cache.
+//                    //.memoryCachePolicy(CachePolicy.DISABLED)
+//                    .build()
+//                imageLoader.enqueue(request)
+//            }
+//        }
 
         // bind the state
         binding.bindState(
@@ -77,6 +158,32 @@ class PixWallFragment : BaseFragment() {
             pagingData = viewModel.pagingDataFlow,
             uiActions = viewModel.accept
         )
+    }
+
+    private fun initDialogs() {
+        appExitDialog = CmnUserConsentDialog(object : CmnUserConsentDialog.UserConsentActionListener {
+            override fun onCancelPressed() {
+                appExitDialog?.dismiss()
+            }
+
+            override fun onOkPressed() {
+                appExitDialog?.dismiss()
+                requireActivity().finish()
+            }
+        }, title = "Are you sure?", subTitle = "Are you sure to leave now?")
+
+        detailPreviewDialog = CmnUserConsentDialog(object : CmnUserConsentDialog.UserConsentActionListener {
+            override fun onCancelPressed() {
+                detailPreviewDialog?.dismiss()
+            }
+
+            override fun onOkPressed() {
+                pixDataForPreview?.let {
+                    navigateTo(PixWallFragmentDirections.actionPixWallFragmentToPreviewFragment(it))
+                }
+                detailPreviewDialog?.dismiss()
+            }
+        }, title = "Full Image Preview", subTitle = "Want to see more details with large photo preview?")
     }
 
     /**
@@ -123,31 +230,12 @@ class PixWallFragment : BaseFragment() {
     }
 
     private fun showDetails(pixData: PixData) {
-        consentDialog = CmnUserConsentDialog(object : CmnUserConsentDialog.UserConsentActionListener {
-            override fun onCancelPressed() {
-                consentDialog.dismiss()
-            }
-
-            override fun onOkPressed() {
-                navigateTo(PixWallFragmentDirections.actionPixWallFragmentToPreviewFragment(pixData))
-                consentDialog.dismiss()
-            }
-        }, title = "Full Image Preview", subTitle = "Want to see more details with large photo preview?")
-        consentDialog.show(parentFragmentManager, "#user_consent_dialog")
+        pixDataForPreview = pixData
+        detailPreviewDialog?.show(parentFragmentManager, "#user_consent_dialog")
     }
 
     private fun showClosingDialog() {
-        consentDialog = CmnUserConsentDialog(object : CmnUserConsentDialog.UserConsentActionListener {
-            override fun onCancelPressed() {
-                consentDialog.dismiss()
-            }
-
-            override fun onOkPressed() {
-                consentDialog.dismiss()
-                requireActivity().finish()
-            }
-        }, title = "Are you sure?", subTitle = "Are you sure to leave now?")
-        consentDialog.show(parentFragmentManager, "#user_consent_closing_dialog")
+        appExitDialog?.show(parentFragmentManager, "#user_consent_closing_dialog")
     }
 
     private fun FragmentPixWallBinding.bindSearch(

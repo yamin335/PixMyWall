@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import mollah.yamin.pixmywall.api.ApiService
 import mollah.yamin.pixmywall.db.AppDatabase
+import mollah.yamin.pixmywall.db.dao.PixDataCacheDao
 import mollah.yamin.pixmywall.db.dao.PixDataDao
 import mollah.yamin.pixmywall.db.dao.PixDataRemoteKeysDao
 import mollah.yamin.pixmywall.models.PixData
@@ -22,6 +23,7 @@ class PixDataRepository @Inject constructor(
     private val pixDataRemoteRepo: PixDataRemoteRepository,
     private val pixDataDao: PixDataDao,
     private val pixDataRemoteKeysDao: PixDataRemoteKeysDao,
+    private val pixDataCacheDao: PixDataCacheDao,
     private val db: AppDatabase
 ) {
 
@@ -40,7 +42,7 @@ class PixDataRepository @Inject constructor(
         return Pager(
             config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
             remoteMediator = PixDataRemoteMediator(
-                pixDataRemoteRepo, pixDataDao, pixDataRemoteKeysDao, db, query
+                pixDataRemoteRepo, pixDataDao, pixDataRemoteKeysDao, pixDataCacheDao, db, query
             ),
             pagingSourceFactory = pagingSourceFactory
         ).flow

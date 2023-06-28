@@ -1,14 +1,20 @@
 package mollah.yamin.pixmywall.di
 
+import android.Manifest
 import android.content.ClipboardManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
+import androidx.annotation.RequiresPermission
+import coil.ImageLoader
+import coil.disk.DiskCache
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import mollah.yamin.pixmywall.coil.PixDataLargePhotoMapper
+import mollah.yamin.pixmywall.utils.NetworkUtils
 import javax.inject.Singleton
 
 /**
@@ -28,6 +34,7 @@ object AppModule {
 
     @Singleton
     @Provides
+    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     fun providesConnectivityManager(@ApplicationContext context: Context): ConnectivityManager =
         context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE)
                 as ConnectivityManager
@@ -37,4 +44,26 @@ object AppModule {
     fun providesClipboardManager(@ApplicationContext context: Context): ClipboardManager =
         context.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE)
                 as ClipboardManager
+
+    @Singleton
+    @Provides
+    fun provideNetworkUtils(connectivityManager: ConnectivityManager): NetworkUtils =
+        NetworkUtils(connectivityManager = connectivityManager)
+
+    @Singleton
+    @Provides
+    @LargeImageLoader
+    fun provideLargeImageLoader(@ApplicationContext context: Context): ImageLoader {
+        return ImageLoader.Builder(context)
+            .components {
+                add(PixDataLargePhotoMapper())
+            }
+            .diskCache {
+                DiskCache.Builder()
+                    .directory(context.cacheDir.resolve("large_image_cache"))
+                    .maxSizePercent(0.5)
+                    .build()
+            }
+            .build()
+    }
 }

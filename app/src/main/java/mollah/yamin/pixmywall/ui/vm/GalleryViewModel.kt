@@ -1,7 +1,9 @@
 package mollah.yamin.pixmywall.ui.vm
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -20,7 +22,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import mollah.yamin.pixmywall.db.dao.PixDataCacheDao
 import mollah.yamin.pixmywall.models.PixData
+import mollah.yamin.pixmywall.models.PixDataCache
 import mollah.yamin.pixmywall.models.UiAction
 import mollah.yamin.pixmywall.models.UiState
 import mollah.yamin.pixmywall.repo.PixDataRepository
@@ -34,9 +38,15 @@ import javax.inject.Inject
 @HiltViewModel
 class GalleryViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val pixDataRepository: PixDataRepository
+    private val pixDataRepository: PixDataRepository,
+    private val pixDataCacheDao: PixDataCacheDao
 ) : ViewModel() {
 
+    val newPixDataCache: LiveData<List<PixDataCache>> = liveData {
+        pixDataCacheDao.getCurrentCachedData().collect { list ->
+            emit(list)
+        }
+    }
     /**
      * Stream of immutable states representative of the UI.
      */

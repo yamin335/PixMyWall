@@ -19,17 +19,26 @@ import android.view.animation.DecelerateInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
+import coil.ImageLoader
+import coil.imageLoader
 import coil.load
 import coil.request.CachePolicy
+import coil.request.ImageRequest
 import coil.size.Scale
 import coil.transform.CircleCropTransformation
 import coil.transform.RoundedCornersTransformation
 import com.google.android.material.chip.Chip
+import dagger.hilt.android.AndroidEntryPoint
 import mollah.yamin.pixmywall.R
 import mollah.yamin.pixmywall.databinding.FragmentPreviewBinding
+import mollah.yamin.pixmywall.models.PixData
 import mollah.yamin.pixmywall.ui.base.BaseFragment
+import mollah.yamin.pixmywall.utils.NetworkObserver
+import mollah.yamin.pixmywall.utils.NetworkUtils
 import mollah.yamin.pixmywall.utils.dpToPx
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PreviewFragment : BaseFragment() {
     private lateinit var binding: FragmentPreviewBinding
     private val args: PreviewFragmentArgs by navArgs()
@@ -64,7 +73,7 @@ class PreviewFragment : BaseFragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(
-            this, // LifecycleOwner
+            this,
             callback
         )
     }
@@ -78,43 +87,70 @@ class PreviewFragment : BaseFragment() {
         val data = args.pixData
         binding.data = data
 
-        binding.photo.load(data.largeImageURL) {
-            crossfade(true)
-            scale(Scale.FIT)
-            diskCachePolicy(CachePolicy.ENABLED)
-            memoryCachePolicy(CachePolicy.ENABLED)
-            transformations(
-                RoundedCornersTransformation(
-                8.dpToPx(binding.root.context),
-                8.dpToPx(binding.root.context),
-                8.dpToPx(binding.root.context),
-                8.dpToPx(binding.root.context))
-            )
-            listener(
-                onSuccess = { _, result ->
-                    imageBitmap = (result.drawable as BitmapDrawable).bitmap
-                },
-                onError = {_, _ ->
-                    //binding.photo.setImageDrawable(imageDrawable)
-                }
-            )
-        }
-
-        binding.photo
-
-        binding.userPhoto.load(data.userImageURL) {
-            crossfade(true)
-            placeholder(R.drawable.img_placeholder)
-            diskCachePolicy(CachePolicy.ENABLED)
-            memoryCachePolicy(CachePolicy.ENABLED)
-            transformations(
-                CircleCropTransformation()
-            )
-        }
         var id = 0
         data.tags?.split(",")?.asSequence()?.forEach { tag ->
             binding.tagGroup.addView(createTagChip(binding.root.context, id++, tag.trim()))
         }
+
+        // For low resolution cached data if internet is not available
+        val imageUrl = if (isConnected.value == true) data.largeImageURL else data.previewURL
+        imageUrl?.let {
+            loadPhotoPreview(it)
+        }
+        loadUserPhoto(data)
+
+        isConnected.observe(viewLifecycleOwner) {
+            if (it) {
+                data.largeImageURL?.let { url ->
+                    loadPhotoPreview(url)
+                }
+                loadUserPhoto(data)
+            }
+        }
+    }
+
+    private fun loadPhotoPreview(url: String) {
+        val request = ImageRequest.Builder(mContext)
+            .data(url)
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .crossfade(true)
+            .target(
+                onStart = {
+                    binding.progress.visibility = View.VISIBLE
+                },
+                onSuccess = { result ->
+                    // Handle the successful result.
+                    imageBitmap = (result as BitmapDrawable).bitmap
+                    binding.photo.setImageDrawable(result)
+                    binding.btnExpand.visibility = View.VISIBLE
+                    binding.progress.visibility = View.GONE
+                },
+                onError = {
+                    binding.progress.visibility = View.GONE
+                }
+            )
+            .build()
+        ImageLoader.Builder(mContext).build().enqueue(request)
+    }
+
+    private fun loadUserPhoto(data: PixData) {
+        val requestProPic = ImageRequest.Builder(mContext)
+            .data(data.userImageURL)
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .crossfade(true)
+            .transformations(
+                CircleCropTransformation()
+            )
+            .target(
+                onSuccess = { result ->
+                    // Handle the successful result.
+                    binding.userPhoto.setImageDrawable(result)
+                }
+            )
+            .build()
+        ImageLoader.Builder(mContext).build().enqueue(requestProPic)
     }
 
     private fun createTagChip(context: Context, chipId: Int, value: String): Chip {
