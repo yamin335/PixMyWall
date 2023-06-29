@@ -28,6 +28,7 @@ android {
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        archivesBaseName = "PixMyWall_v$versionName"
     }
 
     buildTypes {
