@@ -17,7 +17,4 @@ interface PixDataDao {
 
     @Query("DELETE FROM pix_data")
     suspend fun clearCachedPixData()
-
-//    @Query("DELETE FROM pix_data WHERE `query` LIKE '%' || :query || '%'")
-//    suspend fun deleteBySearchQuery(query: String)
 }

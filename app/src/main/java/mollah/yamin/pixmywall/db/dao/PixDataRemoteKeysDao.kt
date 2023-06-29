@@ -8,7 +8,6 @@ import mollah.yamin.pixmywall.models.PixDataRemoteKey
 
 @Dao
 interface PixDataRemoteKeysDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
      fun insertAll(remoteKey: List<PixDataRemoteKey>)
 
@@ -17,5 +16,4 @@ interface PixDataRemoteKeysDao {
 
     @Query("DELETE FROM pix_data_remote_keys")
     suspend fun clearRemoteKeys()
-
 }

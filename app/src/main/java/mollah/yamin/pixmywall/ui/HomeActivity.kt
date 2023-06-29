@@ -1,18 +1,12 @@
 package mollah.yamin.pixmywall.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.window.OnBackInvokedDispatcher
-import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.widget.Toolbar
+import androidx.core.os.BuildCompat
 import dagger.hilt.android.AndroidEntryPoint
 import mollah.yamin.pixmywall.R
 import mollah.yamin.pixmywall.databinding.ActivityHomeBinding
-import mollah.yamin.pixmywall.ui.base.NavigationHost
-import mollah.yamin.pixmywall.utils.updateStatusBarBackgroundColor
-import androidx.activity.addCallback
-import androidx.core.os.BuildCompat
 import mollah.yamin.pixmywall.ui.base.BaseActivity
+import mollah.yamin.pixmywall.utils.updateStatusBarBackgroundColor
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity() {

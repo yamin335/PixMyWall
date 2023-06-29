@@ -3,61 +3,45 @@ package mollah.yamin.pixmywall.ui.fragments
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
-import androidx.paging.map
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import coil.ImageLoader
-import coil.disk.DiskCache
-import coil.memory.MemoryCache
-import coil.request.CachePolicy
-import coil.request.ImageRequest
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import mollah.yamin.pixmywall.R
-import mollah.yamin.pixmywall.coil.PixDataLargePhotoMapper
 import mollah.yamin.pixmywall.databinding.FragmentPixWallBinding
-import mollah.yamin.pixmywall.di.LargeImageLoader
 import mollah.yamin.pixmywall.models.PixData
 import mollah.yamin.pixmywall.models.UiAction
 import mollah.yamin.pixmywall.models.UiState
 import mollah.yamin.pixmywall.paging3.RemotePresentationState
 import mollah.yamin.pixmywall.paging3.asRemotePresentationState
-import mollah.yamin.pixmywall.ui.vm.GalleryViewModel
 import mollah.yamin.pixmywall.ui.adapters.PixDataPagingAdapter
 import mollah.yamin.pixmywall.ui.adapters.PixDataPagingLoadStateAdapter
 import mollah.yamin.pixmywall.ui.base.BaseFragment
 import mollah.yamin.pixmywall.ui.dialog.CmnUserConsentDialog
+import mollah.yamin.pixmywall.ui.vm.PixDataViewModel
 import mollah.yamin.pixmywall.utils.hideKeyboard
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PixWallFragment: BaseFragment() {
-
-    @Inject
-    @LargeImageLoader
-    lateinit var largeImageLoader: ImageLoader
     private lateinit var binding: FragmentPixWallBinding
-    private val viewModel: GalleryViewModel by viewModels()
+    private val viewModel: PixDataViewModel by viewModels()
     private var appExitDialog: CmnUserConsentDialog? = null
     private var detailPreviewDialog: CmnUserConsentDialog? = null
     private var pixDataForPreview: PixData? = null
@@ -72,7 +56,7 @@ class PixWallFragment: BaseFragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(
-            this, // LifecycleOwner
+            this,
             callback
         )
     }
@@ -101,57 +85,8 @@ class PixWallFragment: BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        
         registerToolbar(binding.toolbar)
-
         initDialogs()
-
-//        val imageLoader = ImageLoader.Builder(mContext)
-//            .memoryCache {
-//                MemoryCache.Builder(mContext)
-//                    .maxSizePercent(0.5)
-//                    .build()
-//            }
-//            .diskCache {
-//                DiskCache.Builder()
-//                    .directory(requireActivity().cacheDir.resolve("image_cache"))
-//                    .maxSizePercent(0.2)
-//                    .build()
-//            }
-//            .build()
-
-//        viewModel.newPixDataCache.observe(viewLifecycleOwner) { list ->
-//
-//            for(data in list) {
-//                Log.d("DEBUG_LOG:", "Item fetched: ${data.userImageURL}")
-//
-//                val url = data.largeImageURL!!
-////                val imageLoader = ImageLoader.Builder(mContext)
-////                    .components {
-////                        add(PixDataLargePhotoMapper())
-////                    }
-////                    .memoryCache {
-////                        MemoryCache.Builder(mContext)
-////                            .maxSizePercent(0.25)
-////                            .build()
-////                    }
-////                    .diskCache {
-////                        DiskCache.Builder()
-////                            .directory(mContext.cacheDir.resolve("image_cache"))
-////                            .maxSizePercent(0.02)
-////                            .build()
-////                    }
-////                    .build()
-//
-//
-//                val request = ImageRequest.Builder(mContext)
-//                    .data(url)
-//                    // Disable reading from/writing to the memory cache.
-//                    //.memoryCachePolicy(CachePolicy.DISABLED)
-//                    .build()
-//                imageLoader.enqueue(request)
-//            }
-//        }
 
         // bind the state
         binding.bindState(
@@ -188,7 +123,7 @@ class PixWallFragment: BaseFragment() {
     }
 
     /**
-     * Binds the [UiState] provided  by the [GalleryViewModel] to the UI,
+     * Binds the [UiState] provided  by the [PixDataViewModel] to the UI,
      * and allows the UI to feed back user actions to it.
      */
     private fun FragmentPixWallBinding.bindState(
@@ -347,7 +282,7 @@ class PixWallFragment: BaseFragment() {
                 val triedButFailed = loadState.mediator?.refresh is LoadState.Error && repoAdapter.itemCount == 0
                 retryButton.isVisible = triedButFailed
                 emptyList.isVisible = triedButFailed
-                emptyList.text = getString(R.string.could_not_load_data)
+                emptyList.text = getString(R.string.unable_to_load)
             }
         }
     }

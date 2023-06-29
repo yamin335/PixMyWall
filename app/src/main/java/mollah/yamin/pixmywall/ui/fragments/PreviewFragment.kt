@@ -19,24 +19,13 @@ import android.view.animation.DecelerateInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
-import coil.ImageLoader
-import coil.imageLoader
-import coil.load
-import coil.request.CachePolicy
-import coil.request.ImageRequest
-import coil.size.Scale
-import coil.transform.CircleCropTransformation
-import coil.transform.RoundedCornersTransformation
+import coil.target.Target
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import mollah.yamin.pixmywall.R
 import mollah.yamin.pixmywall.databinding.FragmentPreviewBinding
 import mollah.yamin.pixmywall.models.PixData
 import mollah.yamin.pixmywall.ui.base.BaseFragment
-import mollah.yamin.pixmywall.utils.NetworkObserver
-import mollah.yamin.pixmywall.utils.NetworkUtils
-import mollah.yamin.pixmywall.utils.dpToPx
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PreviewFragment : BaseFragment() {
@@ -110,47 +99,38 @@ class PreviewFragment : BaseFragment() {
     }
 
     private fun loadPhotoPreview(url: String) {
-        val request = ImageRequest.Builder(mContext)
-            .data(url)
-            .diskCachePolicy(CachePolicy.ENABLED)
-            .memoryCachePolicy(CachePolicy.ENABLED)
-            .crossfade(true)
-            .target(
-                onStart = {
-                    binding.progress.visibility = View.VISIBLE
-                },
-                onSuccess = { result ->
-                    // Handle the successful result.
-                    imageBitmap = (result as BitmapDrawable).bitmap
-                    binding.photo.setImageDrawable(result)
-                    binding.btnExpand.visibility = View.VISIBLE
-                    binding.progress.visibility = View.GONE
-                },
-                onError = {
-                    binding.progress.visibility = View.GONE
-                }
-            )
-            .build()
-        ImageLoader.Builder(mContext).build().enqueue(request)
+        binding.imageUrl = url
+        binding.requestTarget = object : Target {
+            override fun onError(error: Drawable?) {
+                super.onError(error)
+                binding.progress.visibility = View.GONE
+            }
+
+            override fun onStart(placeholder: Drawable?) {
+                super.onStart(placeholder)
+                binding.progress.visibility = View.VISIBLE
+            }
+
+            override fun onSuccess(result: Drawable) {
+                super.onSuccess(result)
+                // Handle the successful result.
+                imageBitmap = (result as BitmapDrawable).bitmap
+                binding.photo.setImageDrawable(result)
+                binding.btnExpand.visibility = View.VISIBLE
+                binding.progress.visibility = View.GONE
+            }
+        }
     }
 
     private fun loadUserPhoto(data: PixData) {
-        val requestProPic = ImageRequest.Builder(mContext)
-            .data(data.userImageURL)
-            .diskCachePolicy(CachePolicy.ENABLED)
-            .memoryCachePolicy(CachePolicy.ENABLED)
-            .crossfade(true)
-            .transformations(
-                CircleCropTransformation()
-            )
-            .target(
-                onSuccess = { result ->
-                    // Handle the successful result.
-                    binding.userPhoto.setImageDrawable(result)
-                }
-            )
-            .build()
-        ImageLoader.Builder(mContext).build().enqueue(requestProPic)
+        binding.profileImageUrl = data.userImageURL
+        binding.profileImageRequestTarget = object : Target {
+            override fun onSuccess(result: Drawable) {
+                super.onSuccess(result)
+                // Handle the successful result.
+                binding.userPhoto.setImageDrawable(result)
+            }
+        }
     }
 
     private fun createTagChip(context: Context, chipId: Int, value: String): Chip {

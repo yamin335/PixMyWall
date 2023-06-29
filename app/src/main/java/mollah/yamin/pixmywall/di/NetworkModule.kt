@@ -106,5 +106,4 @@ object NetworkModule {
             .client(okHttpClient).build()
             .create(ApiService::class.java)
     }
-
 }

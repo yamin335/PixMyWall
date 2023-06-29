@@ -3,9 +3,7 @@ package mollah.yamin.pixmywall.models
 import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 @Keep
@@ -17,8 +15,6 @@ data class PixDataResponse(val total: Int, val totalHits: Int, val hits: List<Pi
 * */
 const val COLUMN_ID = "id"
 @Keep
-//@Entity(tableName = "pix_data",
-//    indices = [Index(value = ["query"], unique = false)])
 @Entity(tableName = "pix_data")
 data class PixData(
     @PrimaryKey

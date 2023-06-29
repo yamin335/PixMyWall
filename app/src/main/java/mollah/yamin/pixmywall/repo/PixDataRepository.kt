@@ -6,9 +6,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
-import mollah.yamin.pixmywall.api.ApiService
 import mollah.yamin.pixmywall.db.AppDatabase
-import mollah.yamin.pixmywall.db.dao.PixDataCacheDao
 import mollah.yamin.pixmywall.db.dao.PixDataDao
 import mollah.yamin.pixmywall.db.dao.PixDataRemoteKeysDao
 import mollah.yamin.pixmywall.models.PixData
@@ -23,10 +21,8 @@ class PixDataRepository @Inject constructor(
     private val pixDataRemoteRepo: PixDataRemoteRepository,
     private val pixDataDao: PixDataDao,
     private val pixDataRemoteKeysDao: PixDataRemoteKeysDao,
-    private val pixDataCacheDao: PixDataCacheDao,
     private val db: AppDatabase
 ) {
-
     /**
      * Search repositories whose names match the query, exposed as a stream of data that will emit
      * every time we get more data from the network.
@@ -42,7 +38,7 @@ class PixDataRepository @Inject constructor(
         return Pager(
             config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
             remoteMediator = PixDataRemoteMediator(
-                pixDataRemoteRepo, pixDataDao, pixDataRemoteKeysDao, pixDataCacheDao, db, query
+                pixDataRemoteRepo, pixDataDao, pixDataRemoteKeysDao, db, query
             ),
             pagingSourceFactory = pagingSourceFactory
         ).flow

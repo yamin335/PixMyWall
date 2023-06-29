@@ -4,6 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.fragments.PreviewFragment">
     <data class="FragmentPreviewBinding">
+        <import type="coil.target.Target"/>
+        <variable
+            name="imageUrl"
+            type="String" />
+        <variable
+            name="profileImageUrl"
+            type="String" />
+        <variable
+            name="requestTarget"
+            type="Target" />
+        <variable
+            name="profileImageRequestTarget"
+            type="Target" />
         <variable
             name="data"
             type="mollah.yamin.pixmywall.models.PixData"/>
@@ -45,6 +58,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
+                        app:imageUrl="@{imageUrl}"
+                        app:requestTarget="@{requestTarget}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -77,12 +92,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:layout_marginTop="@dimen/dp_2">
+                            android:layout_marginTop="@dimen/dp_2"
+                            tools:ignore="UseCompoundDrawables">
                             <ImageView
                                 android:id="@+id/userPhoto"
                                 android:layout_width="@dimen/dp_40"
                                 android:layout_height="@dimen/dp_40"
-                                app:srcCompat="@drawable/ic_profile_avatar" />
+                                app:circularImageUrl="@{profileImageUrl}"
+                                app:requestTarget="@{profileImageRequestTarget}"
+                                app:srcCompat="@drawable/ic_profile_avatar"
+                                android:contentDescription="@string/default_description" />
                             <TextView
                                 android:id="@+id/user"
                                 android:layout_width="match_parent"
@@ -131,12 +150,14 @@
                                 app:layout_constraintEnd_toStartOf="@+id/guideline1"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:ignore="UseCompoundDrawables">
 
                                 <ImageView
                                     android:layout_width="@dimen/dp_24"
                                     android:layout_height="@dimen/dp_24"
-                                    app:srcCompat="@drawable/ic_likes" />
+                                    app:srcCompat="@drawable/ic_likes"
+                                    android:contentDescription="@string/default_description"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -167,12 +188,14 @@
                                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/guideline1"
-                                app:layout_constraintTop_toTopOf="parent">
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:ignore="UseCompoundDrawables">
 
                                 <ImageView
                                     android:layout_width="@dimen/dp_24"
                                     android:layout_height="@dimen/dp_24"
-                                    app:srcCompat="@drawable/ic_comments" />
+                                    app:srcCompat="@drawable/ic_comments"
+                                    android:contentDescription="@string/default_description"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -202,12 +225,14 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/guideline2"
-                                app:layout_constraintTop_toTopOf="parent">
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:ignore="UseCompoundDrawables">
 
                                 <ImageView
                                     android:layout_width="@dimen/dp_24"
                                     android:layout_height="@dimen/dp_24"
-                                    app:srcCompat="@drawable/ic_downloads" />
+                                    app:srcCompat="@drawable/ic_downloads"
+                                    android:contentDescription="@string/default_description"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -257,7 +282,8 @@
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/round_arrow_back_24" />
+                        app:srcCompat="@drawable/round_arrow_back_24"
+                        android:contentDescription="@string/default_description"/>
 
                     <ImageView
                         android:id="@+id/btnExpand"
@@ -272,7 +298,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="1.0"
-                        app:srcCompat="@drawable/ic_expand" />
+                        app:srcCompat="@drawable/ic_expand"
+                        android:contentDescription="@string/default_description"/>
 
                     <TextView
                         android:id="@+id/startView"
@@ -327,7 +354,8 @@
                 android:elevation="@dimen/dp_8"
                 android:layout_margin="@dimen/dp_16"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"/>
+                android:layout_alignParentTop="true"
+                android:contentDescription="@string/default_description"/>
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

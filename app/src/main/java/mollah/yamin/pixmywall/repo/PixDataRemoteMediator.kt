@@ -7,11 +7,9 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import mollah.yamin.pixmywall.db.AppDatabase
-import mollah.yamin.pixmywall.db.dao.PixDataCacheDao
 import mollah.yamin.pixmywall.db.dao.PixDataDao
 import mollah.yamin.pixmywall.db.dao.PixDataRemoteKeysDao
 import mollah.yamin.pixmywall.models.PixData
-import mollah.yamin.pixmywall.models.PixDataCache
 import mollah.yamin.pixmywall.models.PixDataRemoteKey
 import okio.IOException
 import retrofit2.HttpException
@@ -23,7 +21,6 @@ class PixDataRemoteMediator(
     private val pixDataRemoteRepo: PixDataRemoteRepository,
     private val pixDataDao: PixDataDao,
     private val pixDataRemoteKeysDao: PixDataRemoteKeysDao,
-    private val pixDataCacheDao: PixDataCacheDao,
     private val db: AppDatabase,
     private val query: String
 ) : RemoteMediator<Int, PixData>() {
@@ -82,20 +79,15 @@ class PixDataRemoteMediator(
                 val nextKey = if (endOfPaginationReached) null else pageIndex + 1
                 val newList: ArrayList<PixData> = ArrayList()
                 val keys: ArrayList<PixDataRemoteKey> = ArrayList()
-//                val cachedDataList: ArrayList<PixDataCache> = ArrayList()
                 for (pixData in pixDataList) {
                     val temp = PixData(
                         pixData.id, pixData.tags, pixData.previewURL,
                         pixData.largeImageURL, pixData.user, pixData.downloads,
                         pixData.likes, pixData.comments, pixData.userImageURL, query, pageIndex
                     )
-//                    val cacheData = PixDataCache(pixData.id, pixData.previewURL,
-//                        pixData.largeImageURL, pixData.userImageURL)
                     newList.add(temp)
-//                    cachedDataList.add(cacheData)
                     keys.add(PixDataRemoteKey(pixDataId = pixData.id, prevKey = prevKey, nextKey = nextKey))
                 }
-//                pixDataCacheDao.updatePixDataCache(cachedDataList)
                 pixDataRemoteKeysDao.insertAll(keys)
                 pixDataDao.insertAll(newList)
             }

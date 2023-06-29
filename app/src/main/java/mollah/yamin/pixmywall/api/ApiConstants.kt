@@ -1,5 +1,6 @@
 package mollah.yamin.pixmywall.api
 
+import mollah.yamin.pixmywall.BuildConfig
 import mollah.yamin.pixmywall.api.Api.API_REPO
 
 object Api {
@@ -14,21 +15,13 @@ object Api {
     const val API_REPO = "api"
     const val PHOTO_IMAGE_TYPE = "photo"
 
-    const val ContentType = "Content-Type: application/json"
-
     /*
     * Do not place secret keys like that in production.
     * Use app preferences to store secret keys making custom
     * session manager. */
-    const val API_KEY = "37699167-c79ddc6ba4895b131ee74e6f7"
+    var API_KEY = BuildConfig.API_KEY
 }
 
 object ApiEndPoint {
     const val IMAGE_QUERY = "$API_REPO/"
-}
-
-object ResponseCodes {
-    const val CODE_SUCCESS = 200
-    const val CODE_LIMIT_EXCEEDED = 429
-    const val CODE_UNAUTHORIZED = 400
 }

@@ -5,7 +5,6 @@ import androidx.paging.LoadState
 import androidx.paging.Pager
 import androidx.paging.PagingSource
 import androidx.paging.RemoteMediator
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.scan
@@ -23,7 +22,6 @@ enum class RemotePresentationState {
  * successful [RemoteMediator] fetches always cause invalidation of the [PagingSource] as in the
  * case of the [PagingSource] provide by Room.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 fun Flow<CombinedLoadStates>.asRemotePresentationState(): Flow<RemotePresentationState> =
     scan(RemotePresentationState.INITIAL) { state, loadState ->
         when (state) {

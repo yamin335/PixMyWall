@@ -6,12 +6,11 @@
     <string name="retry">Retry</string>
     <string name="no_results">No photos found</string>
     <string name="tags">Photo Tags</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="likes">Likes</string>
     <string name="comments">Comments</string>
     <string name="downloads">Downloads</string>
-    <string name="could_not_load_data">Could not load data</string>
     <string name="unable_to_load">Couldn\'t load photos</string>
+    <string name="default_description">App Image</string>
 </resources>

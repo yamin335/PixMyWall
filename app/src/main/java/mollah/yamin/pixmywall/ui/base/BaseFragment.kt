@@ -2,7 +2,6 @@ package mollah.yamin.pixmywall.ui.base
 
 import android.content.Context
 import androidx.appcompat.widget.Toolbar
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
@@ -13,26 +12,22 @@ import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import mollah.yamin.pixmywall.ui.HomeActivity
 import mollah.yamin.pixmywall.utils.NetworkObserver
-import mollah.yamin.pixmywall.utils.NetworkUtils
-import javax.inject.Inject
 
 /**
  * To be implemented by components that host top-level navigation destinations.
  */
 interface NavigationHost {
 
-    /** Called by MainNavigationFragment to setup it's toolbar with the navigation controller. */
+    /** To setup toolbar with the navigation controller. */
     fun registerToolbarWithNavigation(toolbar: Toolbar)
 }
 
 @AndroidEntryPoint
 abstract class BaseFragment: Fragment(), NetworkObserver {
 
-    var navHost: NavigationHost? = null
+    private var navHost: NavigationHost? = null
 
-    lateinit var viewDataBinding: ViewDataBinding
-
-    val navController: NavController
+    private val navController: NavController
         get() = findNavController()
 
     val mContext: Context

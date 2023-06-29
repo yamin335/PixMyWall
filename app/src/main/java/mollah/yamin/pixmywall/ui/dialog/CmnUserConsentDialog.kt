@@ -42,19 +42,6 @@ class CmnUserConsentDialog constructor(
 
         binding.title = title
         binding.subTitle = subTitle
-//        if (title.isEmpty()) {
-//            binding.title.visibility = View.GONE
-//        } else {
-//            binding.title.visibility = View.VISIBLE
-//            binding.title = title
-//        }
-
-//        if (subTitle.isEmpty()) {
-//            binding.subTitle.visibility = View.GONE
-//        } else {
-//            binding.subTitle.visibility = View.VISIBLE
-//            binding.subTitle.text = subTitle
-//        }
 
         if (cancelButtonText.isNotEmpty()) {
             binding.cancelButton.text = cancelButtonText
