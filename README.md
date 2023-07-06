@@ -14,11 +14,11 @@
 
 <h2>:building_construction: App Installation Guide:</h2>
 
-#### Please follow the instruction below to successfully run the project:
+#### Please follow the guideline described below to successfully run the project:
 
 1. First `clone` the repository or download the `.zip` file of the repository and extract it.
-2. Then delete the `.idea` hidden file from the `root` directory of the cloned project.
-3. Since this project used `jdk 17`, as a next step you have to select the `jdk 17` from project configuration. If you don't know how to do that, please follow the guidelines below:
+2. Then delete the `.idea` hidden file from the `root` directory of the cloned project to configure the project with your environment.
+3. Since this project uses `jdk 17`, So, as a next step you have to select the `jdk 17` from project configuration. To do that, please follow the guidelines below:
    - Open `Settings` from `Android Studio` -> Click & expand `Build, Execution, Deployment` -> Click & expand `Build Tools`.
    - Click `Gradle` and select `jbr-17` or `coretto-17` as Gradle JDK. If you can't find any of the mentioned `JDK` there, please download one.
 4. Sync the project now.
