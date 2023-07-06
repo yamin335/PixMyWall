@@ -82,7 +82,10 @@ class PreviewFragment : BaseFragment() {
         }
 
         // For low resolution cached data if internet is not available
-        val imageUrl = if (isConnected.value == true) data.largeImageURL else data.previewURL
+        val imageUrl = if (isConnected.value == true) {
+            data.largeImageURL
+        } else data.previewURL
+
         imageUrl?.let {
             loadPhotoPreview(it)
         }

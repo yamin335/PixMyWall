@@ -43,7 +43,10 @@ abstract class BaseFragment: Fragment(), NetworkObserver {
         if (context is NavigationHost) {
             navHost = context
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
         if (mActivity is HomeActivity) {
             val parentActivity = (mActivity as HomeActivity)
             parentActivity.networkObserver = this
