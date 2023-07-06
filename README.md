@@ -25,7 +25,7 @@
 5. Open `local.properties` file and place this line `API_KEY = "37699167-c79ddc6ba4895b131ee74e6f7"` under the `sdk.dir="..."` declaration.
 6. That's it 😊 now Clean & Run the project, you will see a nice UI 😊❤️
 
-### N.B: For quick look you can install the `.apk` file directly in your phone by downloading it from the [release](https://github.com/yamin335/PixMyWall/releases/tag/v1.0.0) folder. 
+### N.B: For a quick look, you can install the `.apk` file directly in your phone by downloading it from the [release](https://github.com/yamin335/PixMyWall/releases/tag/v1.0.0) folder. 
 
 <br>
 
