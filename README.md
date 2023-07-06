@@ -17,13 +17,13 @@
 #### Please follow the instruction below to successfully run the project:
 
 1. First `clone` the repository or download the `.zip` file of the repository and extract it.
-2. Then delete the `.idea` hidden file from the `root` directory of cloned project.
+2. Then delete the `.idea` hidden file from the `root` directory of the cloned project.
 3. Since this project used `jdk 17`, as a next step you have to select the `jdk 17` from project configuration. If you don't know how to do that, please follow the guidelines below:
    - Open `Settings` from `Android Studio` -> Click & expand `Build, Execution, Deployment` -> Click & expand `Build Tools`.
    - Click `Gradle` and select `jbr-17` or `coretto-17` as Gradle JDK. If you can't find any of the mentioned `JDK` there, please download one.
 4. Sync the project now.
 5. Open `local.properties` file and place this line `API_KEY = "37699167-c79ddc6ba4895b131ee74e6f7"` under the `sdk.dir="..."` declaration.
-6. That's it 😊 now Clean & Run the project, you will see a nice UI now 😊❤️
+6. That's it 😊 now Clean & Run the project, you will see a nice UI 😊❤️
 
 ### N.B: For quick look you can install the `.apk` file directly in your phone by downloading it from the [release](https://github.com/yamin335/PixMyWall/releases/tag/v1.0.0) folder. 
 
