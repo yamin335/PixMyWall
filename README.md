@@ -27,6 +27,8 @@
 
 ### N.B: For quick look you can install the `.apk` file directly in your phone by downloading it from the [release](https://github.com/yamin335/PixMyWall/releases/tag/v1.0.0) folder. 
 
+<br>
+
 <h2>🛠️ Tech Stack</h2>
 
 - Single Activity Architecture
