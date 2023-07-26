@@ -60,7 +60,7 @@ class PixDataPagingViewHolder(
     companion object {
         fun create(parent: ViewGroup, callback: (PixData?) -> Unit): PixDataPagingViewHolder {
             val binding: PixWallListItemBinding =
-                PixWallListItemBinding.inflate(LayoutInflater.from(parent.context))
+                PixWallListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return PixDataPagingViewHolder(binding, callback)
         }
     }
