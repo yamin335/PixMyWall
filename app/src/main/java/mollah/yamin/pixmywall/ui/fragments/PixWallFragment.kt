@@ -134,7 +134,7 @@ class PixWallFragment: BaseFragment() {
         val orientation = resources.configuration.orientation
 
         val staggeredGridLayoutManager = if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         } else {
             StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         }
